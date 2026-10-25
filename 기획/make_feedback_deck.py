@@ -292,7 +292,6 @@ def build():
         text(s, x - 0.2, 3.2, 1.6 + 0.4, 0.5, nm, size=20, font=F_XB, align=PP_ALIGN.CENTER)
         b = box(s, x - 0.35, 3.85, 1.9, 1.45, fill=BG, alpha=75)
         text(s, x - 0.25, 3.98, 1.7, 1.3, d.split("\n"), size=12.5, align=PP_ALIGN.CENTER, spacing=1.3)
-    text(s, 0.8, 6.55, 12, 0.4, "일곱 가지 조작이 한 판 안에서 모두 의미 있게 쓰인다", size=13, color=MUTED)
     notes(s, "실제 레이스 한 판은 이렇게 흘러갑니다. 출발해서 습보로 올리고, 직선에서는 리듬으로 체력을 아끼고, 코너 전에는 구보로 내려 몸을 기울여 돕니다. 장애물은 점프로 넘고, 마지막 직선에서 아껴둔 채찍으로 추월합니다.")
 
     # 8. 월드 구조 — 광활한 필드 위의 마을
@@ -398,7 +397,6 @@ def build():
         y += 1.2
     text(s, 1.0, 5.1, 7.5, 1.2, ["어떤 음식을 주느냐에 따라 속도형 · 지구력형 · 점프형으로",
                                  "같은 말도 다르게 키울 수 있다"], size=15, color=CREAM, spacing=1.35)
-    text(s, 0.7, 6.65, 12, 0.4, "기수 성장 · 말 특성 · 기능 장비는 넣지 않아 레이싱에 집중", size=12, color=MUTED)
     notes(s, "육성은 먹이로 합니다. 밥을 먹이면 레벨이 올라 전체 능력치가 오르고, 과일은 속도, 채소는 지구력, 곡물은 순발력, 견과류는 점프력을 올립니다. 포만감으로 한 번에 먹일 수 있는 양을 제한합니다. RPG 요소가 레이싱을 흐리지 않도록 모든 성장이 레이스 성능으로만 이어지게 했습니다.")
 
     # 11. 성장 루프
@@ -416,15 +414,8 @@ def build():
 
     # 12. 마무리
     s = prs.slides.add_slide(BLANK); set_bg(s, image=os.path.join(ASSET, "bg_trail.jpg"))
-    text(s, 0.9, 1.0, 8, 0.5, "다음 단계", size=16, font=F_SB, color=GOLD)
-    nxt = [("기승 조작 프로토타입", "구보 · 습보 · 리듬 손맛 검증"), ("콘텐츠 상세 설계", "마을 콘셉트 · 퀘스트 · 교배 규칙"), ("아트 방향 수립", "말 모델링 · 배경 퀄리티")]
-    y = 1.65
-    for i, (a, b) in enumerate(nxt):
-        circle(s, 1.3, y + 0.42, 0.62, GOLD, str(i + 1), size=16)
-        text(s, 1.85, y, 7, 0.85, [[(a, {"font": F_XB, "size": 20})], [(b, {"size": 13, "color": MUTED})]], anchor=MSO_ANCHOR.MIDDLE)
-        y += 1.1
-    text(s, 0.9, 5.4, 11, 1.0, "감사합니다", size=44, font=F_XB)
-    notes(s, "앞으로는 기승 조작 프로토타입으로 손맛을 먼저 검증하고, 마을 콘셉트와 퀘스트 같은 콘텐츠를 상세 설계하고, 아트 방향을 세우겠습니다. 감사합니다.")
+    text(s, 0, 0, 13.333, 7.5, "감사합니다", size=54, font=F_XB, align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+    notes(s, "감사합니다.")
 
     prs.save(OUT)
     print("saved", OUT)
