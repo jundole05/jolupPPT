@@ -172,44 +172,52 @@ def build():
     text(s, 0.92, 5.9, 7, 0.4, "김경준  ·  정진영  ·  강석주", size=14, color=MUTED)
     notes(s, "지난 발표에서 받은 피드백을 바탕으로 게임 기획을 수정했습니다. 오늘은 무엇을 바꾸고 무엇을 더했는지 말씀드리겠습니다.")
 
-    # 2. 피드백과 대응
+    # 2. PART 1 도입 — 실제 승마의 구조
     s = prs.slides.add_slide(BLANK); set_bg(s)
-    title(s, "받은 피드백과 우리의 답")
-    rows = [("말 레이싱 그 이상도 이하도 아니다", "기승 조작 시스템", "실제 승마 기술을 조작으로"),
-            ("기수는 어떤 조작을 하는가?", "7가지 승마 조작", "고삐 · 다리 · 자세 · 보법 · 리듬 · 점프 · 채찍"),
-            ("게임의 규모가 너무 작다", "오픈 필드", "마을 3곳 + 필드 + 퀘스트"),
-            ("RPG가 미흡하다 · 적정선을 찾아라", "먹이 육성 시스템", "모든 성장은 레이스 성능으로")]
-    y = 1.75
-    for i, (fb, ans, sub) in enumerate(rows):
-        b = box(s, 0.7, y, 5.2, 1.0, fill=PANEL)
-        text(s, 0.95, y, 4.8, 1.0, [[(f"피드백  ", {"size": 11, "color": MUTED, "font": F_SB})], fb],
-             size=16, font=F_SB, color=CREAM, anchor=MSO_ANCHOR.MIDDLE)
-        arrow(s, 6.05, y + 0.5, 6.85, y + 0.5)
-        b2 = box(s, 7.0, y, 5.65, 1.0, fill=PANEL2, line=GOLD)
-        text(s, 7.3, y, 5.2, 1.0, [[(ans, {"size": 19, "font": F_XB, "color": GOLD})], [(sub, {"size": 13, "color": CREAM})]],
-             anchor=MSO_ANCHOR.MIDDLE)
-        y += 1.18
-    text(s, 0.7, 6.6, 12, 0.4, "* 아트 관련 피드백(말 모델링 · 배경 퀄리티)은 추후 아트 방향 수립 시 반영 예정", size=12, color=MUTED)
-    notes(s, "교수님께서 주신 피드백을 크게 네 가지로 정리했고, 각각 이렇게 답을 준비했습니다. 아트 관련 피드백은 이후 아트 방향을 세우면서 반영하겠습니다.")
+    tag(s, "피드백 1 · 2 · 3 대응")
+    text(s, 0.7, 0.55, 8, 0.4, "PART 1  기승 조작 시스템", size=14, font=F_SB, color=GOLD)
+    text(s, 0.7, 0.95, 11.5, 0.8, "승마는 '부조'로 말과 대화하는 운동이다", size=32, font=F_XB)
+    text(s, 0.72, 1.7, 11.5, 0.4, "부조(扶助, Aids) — 기수가 말에게 보내는 신호", size=14, color=MUTED)
 
-    # 3. 핵심 콘셉트
-    s = prs.slides.add_slide(BLANK); set_bg(s)
-    photo(s, "2장 수정본.png", 7.2, 0, 6.133, 7.5)
-    ov = box(s, 7.2, 0, 6.133, 7.5, fill=BG, shape=MSO_SHAPE.RECTANGLE, alpha=35)
-    tag(s, "피드백 1 · 2 대응")
-    text(s, 0.7, 0.9, 6, 0.4, "PART 1  기승 조작 시스템", size=14, font=F_SB, color=GOLD)
-    text(s, 0.7, 1.6, 6.3, 2.2, ["말은 탈것이 아니라,", "신호를 주고받는", "파트너다"], size=40, font=F_XB, spacing=1.08)
-    labels = [("입력", "플레이어의 신호"), ("말의 상태", "스태미나 · 능력치"), ("움직임", "속도 · 회전 · 점프")]
+    # 구조 도식: 기수 → 부조 → 말 → 움직임
+    flow = [("기수", "신호를 보낸다", PANEL2, CREAM), ("부조", "손 · 다리 · 체중 · 도구", GOLD, DARKTXT),
+            ("말", "보법과 리듬으로 반응", PANEL2, CREAM), ("움직임", "방향 · 속도 · 도약", PANEL2, CREAM)]
     x = 0.7
-    for i, (a, b) in enumerate(labels):
-        bx = box(s, x, 4.75, 1.85, 1.25, fill=PANEL2 if i != 1 else GOLD, line=None)
-        col = CREAM if i != 1 else DARKTXT
-        text(s, x, 4.75, 1.85, 1.25, [[(a, {"size": 18, "font": F_XB, "color": col})], [(b, {"size": 11, "color": col})]],
+    for i, (a_, b_, fc, tc) in enumerate(flow):
+        box(s, x, 2.3, 2.6, 1.05, fill=fc)
+        text(s, x, 2.3, 2.6, 1.05, [[(a_, {"size": 20, "font": F_XB, "color": tc})], [(b_, {"size": 11.5, "color": tc})]],
              align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-        if i < 2: arrow(s, x + 1.9, 5.375, x + 2.2, 5.375)
-        x += 2.25
-    text(s, 0.7, 6.3, 6.3, 0.5, "같은 조작이라도 말의 상태에 따라 결과가 달라진다", size=14, color=MUTED)
-    notes(s, "실제 승마에서 기수는 말을 직접 움직이지 않고 고삐, 다리, 몸으로 신호를 보냅니다. 저희 게임의 조작도 이 구조를 따릅니다. 플레이어의 입력은 말에게 보내는 신호이고, 말은 스태미나와 능력치에 따라 반응합니다.")
+        if i < 3: arrow(s, x + 2.66, 2.825, x + 3.06, 2.825)
+        x += 3.1
+
+    # 부조의 종류 + 말의 움직임
+    cards = [("자연 부조", "기수의 몸으로 보내는 신호", [("손 (고삐)", "방향 전환 · 감속"), ("다리", "전진 · 가속"), ("기좌 · 체중", "균형 · 코너링 · 자세")], GREEN),
+             ("인공 부조", "도구로 보강하는 신호", [("채찍", "다리 신호 보강, 순간 추진"), ("박차", "더 강한 다리 신호")], GREEN),
+             ("말의 움직임", "기수가 맞춰야 하는 리듬", [("보법", "평보 → 속보 → 구보 → 습보"), ("리듬", "걸음마다 일정한 박자")], GOLD)]
+    x = 0.7
+    for nm, sub, rows_, col in cards:
+        box(s, x, 3.65, 3.83, 2.45, fill=PANEL)
+        text(s, x + 0.3, 3.82, 3.4, 0.45, nm, size=19, font=F_XB, color=col)
+        text(s, x + 0.3, 4.25, 3.4, 0.35, sub, size=11.5, color=MUTED)
+        yy = 4.7
+        for k_, v_ in rows_:
+            text(s, x + 0.3, yy, 3.5, 0.4, [[(k_ + "   ", {"font": F_SB, "size": 13.5, "color": CREAM}), (v_, {"size": 12, "color": MUTED})]])
+            yy += 0.43
+        x += 3.99
+
+    # PART 1 흐름 예고
+    steps_ = ["실제 승마 기술", "게임 구현", "조작 방식"]
+    x = 0.7
+    for i, st in enumerate(steps_):
+        b2 = box(s, x, 6.4, 2.6, 0.55, fill=None, line=GOLD, radius=0.5)
+        shape_text(b2, f"{i + 1}  {st}", size=13, color=GOLD, font=F_SB)
+        if i < 2: arrow(s, x + 2.66, 6.675, x + 3.0, 6.675, width=1.5)
+        x += 3.1
+    text(s, 10.05, 6.4, 2.6, 0.55, "PART 1의 흐름", size=12, color=MUTED, anchor=MSO_ANCHOR.MIDDLE)
+    notes(s, "실제 승마에서 기수는 말을 직접 움직이지 않습니다. 부조라고 하는 신호를 보내 말과 대화합니다. "
+             "손으로 잡는 고삐, 다리, 기좌와 체중 같은 몸으로 보내는 자연 부조가 있고, 채찍이나 박차처럼 도구로 신호를 보강하는 인공 부조가 있습니다. "
+             "말은 이 신호를 받아 평보, 속보, 구보, 습보의 보법으로 움직이고, 걸음마다 일정한 리듬이 있어 기수는 그 리듬에 몸을 맞춥니다. "
+             "이제 이 승마의 구조를 저희 게임에 어떻게 구현했고, 어떤 조작으로 표현했는지 말씀드리겠습니다.")
 
     # 4. 7가지 승마 조작
     s = prs.slides.add_slide(BLANK); set_bg(s)
@@ -228,38 +236,7 @@ def build():
     text(s, 0.7, 6.65, 12, 0.4, "강조된 보법 · 리듬이 우리 게임만의 차별점", size=12, color=MUTED)
     notes(s, "실제 승마의 부조 기술을 일곱 가지 조작으로 옮겼습니다. 고삐, 다리, 자세, 보법, 리듬, 점프, 채찍입니다. 이 중 보법과 리듬이 일반 레이싱 게임과 가장 다른 부분입니다.")
 
-    # 5. 보법 모드 + 리듬
-    s = prs.slides.add_slide(BLANK); set_bg(s)
-    title(s, "직선은 습보, 코너는 구보", "보법 모드와 리듬 — 우리 게임만의 차별점")
-    tag(s, "피드백 1 대응")
-    # 트랙 도식: 직선(습보) — 코너(구보) — 직선(습보)
-    ty = 2.95
-    seg = box(s, 0.9, ty, 4.4, 0.42, fill=GOLD, radius=0.5)
-    cor = box(s, 5.45, ty - 0.05, 2.4, 0.52, fill=GREEN, radius=0.5)
-    seg2 = box(s, 8.0, ty, 4.4, 0.42, fill=GOLD, radius=0.5)
-    shape_text(seg, "직선  ·  습보", size=13, color=DARKTXT, font=F_XB)
-    shape_text(cor, "코너  ·  구보", size=13, color=DARKTXT, font=F_XB)
-    shape_text(seg2, "직선  ·  습보", size=13, color=DARKTXT, font=F_XB)
-    # 리듬 박자 점
-    for k in range(7):
-        circle(s, 1.35 + k * 0.6, ty - 0.35, 0.16, CREAM)
-        circle(s, 8.45 + k * 0.6, ty - 0.35, 0.16, CREAM)
-    text(s, 0.9, ty - 0.95, 5, 0.4, "♪  W를 말발굽 박자에 맞춰 누르면 리듬 가속", size=13, color=CREAM)
-    # 비교 카드
-    cards = [("습보", "직선용 전력 질주", ["최고 속도 높음", "회전 둔함", "스태미나 소모 큼"], GOLD),
-             ("구보", "코너용 안정 주행", ["회전 안정", "스태미나 절약", "최고 속도 낮음"], GREEN),
-             ("리듬", "말과 호흡 맞추기", ["W를 박자에 맞춰 입력", "스태미나 효율 · 속도 상승", "놓쳐도 기본 가속 유지"], CREAM)]
-    x = 0.9
-    for nm, sub, pts, col in cards:
-        box(s, x, 3.75, 3.7, 2.6, fill=PANEL)
-        text(s, x + 0.35, 3.95, 3.1, 0.5, nm, size=24, font=F_XB, color=col)
-        text(s, x + 0.35, 4.5, 3.1, 0.4, sub, size=13, font=F_SB, color=MUTED)
-        text(s, x + 0.35, 4.95, 3.1, 1.4, ["·  " + p for p in pts], size=14, color=CREAM, spacing=1.35)
-        x += 3.85
-    text(s, 0.9, 6.6, 11.5, 0.4, "언제 모드를 바꾸고, 얼마나 리듬을 맞추는지가 곧 실력", size=13, color=MUTED)
-    notes(s, "직선에서는 빠른 습보로, 코너 전에는 안정적인 구보로 모드를 바꿉니다. 습보로 코너에 들어가면 밀려납니다. 또 W를 말발굽 박자에 맞춰 누르면 스태미나를 아끼면서 더 빨리 달릴 수 있습니다. 말과 호흡을 맞추는 감각을 손으로 느끼게 하는 것이 목표입니다.")
-
-    # 6. 조작 키
+    # 4. 조작 키
     s = prs.slides.add_slide(BLANK); set_bg(s)
     title(s, "왼손은 말을, 오른손은 기수의 몸을", "키보드 조작")
     tag(s, "피드백 2 · 3 대응")
@@ -290,6 +267,37 @@ def build():
         x += 4.0
     notes(s, "왼손으로는 말을 다룹니다. W와 S로 가속과 감속, A와 D로 방향, Shift로 보법 전환, Space로 점프, Tab으로 채찍입니다. 오른손은 기수의 몸입니다. 위 방향키를 누르고 있으면 몸을 숙인 레이싱 자세, 좌우 방향키는 몸을 기울여 코너를 돕습니다. 처음에는 가속, 방향, 점프만으로도 충분히 탈 수 있게 단계별로 익힙니다.")
 
+    # 5. 보법 모드 + 리듬 (조작 키 다음)
+    s = prs.slides.add_slide(BLANK); set_bg(s)
+    title(s, "직선은 습보, 코너는 구보", "보법 모드와 리듬 — 우리 게임만의 차별점")
+    tag(s, "피드백 1 대응")
+    # 트랙 도식: 직선(습보) — 코너(구보) — 직선(습보)
+    ty = 2.95
+    seg = box(s, 0.9, ty, 4.4, 0.42, fill=GOLD, radius=0.5)
+    cor = box(s, 5.45, ty - 0.05, 2.4, 0.52, fill=GREEN, radius=0.5)
+    seg2 = box(s, 8.0, ty, 4.4, 0.42, fill=GOLD, radius=0.5)
+    shape_text(seg, "직선  ·  습보", size=13, color=DARKTXT, font=F_XB)
+    shape_text(cor, "코너  ·  구보", size=13, color=DARKTXT, font=F_XB)
+    shape_text(seg2, "직선  ·  습보", size=13, color=DARKTXT, font=F_XB)
+    # 리듬 박자 점
+    for k in range(7):
+        circle(s, 1.35 + k * 0.6, ty - 0.35, 0.16, CREAM)
+        circle(s, 8.45 + k * 0.6, ty - 0.35, 0.16, CREAM)
+    text(s, 0.9, ty - 0.95, 5, 0.4, "♪  W를 말발굽 박자에 맞춰 누르면 리듬 가속", size=13, color=CREAM)
+    # 비교 카드
+    cards = [("습보", "직선용 전력 질주", ["최고 속도 높음", "회전 둔함", "스태미나 소모 큼"], GOLD),
+             ("구보", "코너용 안정 주행", ["회전 안정", "스태미나 절약", "최고 속도 낮음"], GREEN),
+             ("리듬", "말과 호흡 맞추기", ["W를 박자에 맞춰 입력", "스태미나 효율 · 속도 상승", "놓쳐도 기본 가속 유지"], CREAM)]
+    x = 0.9
+    for nm, sub, pts, col in cards:
+        box(s, x, 3.75, 3.7, 2.6, fill=PANEL)
+        text(s, x + 0.35, 3.95, 3.1, 0.5, nm, size=24, font=F_XB, color=col)
+        text(s, x + 0.35, 4.5, 3.1, 0.4, sub, size=13, font=F_SB, color=MUTED)
+        text(s, x + 0.35, 4.95, 3.1, 1.4, ["·  " + p for p in pts], size=14, color=CREAM, spacing=1.35)
+        x += 3.85
+    text(s, 0.9, 6.6, 11.5, 0.4, "언제 모드를 바꾸고, 얼마나 리듬을 맞추는지가 곧 실력", size=13, color=MUTED)
+    notes(s, "직선에서는 빠른 습보로, 코너 전에는 안정적인 구보로 모드를 바꿉니다. 습보로 코너에 들어가면 밀려납니다. 또 W를 말발굽 박자에 맞춰 누르면 스태미나를 아끼면서 더 빨리 달릴 수 있습니다. 말과 호흡을 맞추는 감각을 손으로 느끼게 하는 것이 목표입니다.")
+
     # 7. 레이스 흐름
     s = prs.slides.add_slide(BLANK); set_bg(s, image=os.path.join(ASSET, "bg_trail.jpg"))
     title(s, "레이스 한 판의 흐름")
@@ -308,43 +316,55 @@ def build():
     text(s, 0.8, 6.55, 12, 0.4, "일곱 가지 조작이 한 판 안에서 모두 의미 있게 쓰인다", size=13, color=MUTED)
     notes(s, "실제 레이스 한 판은 이렇게 흘러갑니다. 출발해서 습보로 올리고, 직선에서는 리듬으로 체력을 아끼고, 코너 전에는 구보로 내려 몸을 기울여 돕니다. 장애물은 점프로 넘고, 마지막 직선에서 아껴둔 채찍으로 추월합니다.")
 
-    # 8. 월드 구조
+    # 8. 월드 구조 — 광활한 필드 위의 마을
     s = prs.slides.add_slide(BLANK); set_bg(s)
     tag(s, "피드백 4 대응")
-    text(s, 0.7, 0.9 - 0.35, 6, 0.4, "PART 2  필드 · 육성", size=14, font=F_SB, color=GOLD)
-    title_y = 1.0
-    text(s, 0.7, title_y, 10, 0.8, "마을 3곳과 그 사이의 필드", size=34, font=F_XB)
-    # 지도
-    xs = [1.6, 4.55, 7.5]
-    for i in range(2):
-        c = s.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(xs[i] + 0.7), Inches(3.3), Inches(xs[i + 1] - 0.7), Inches(3.3))
-        c.line.color.rgb = GREEN; c.line.width = Pt(3); c.line.dash_style = 4
-        text(s, xs[i] + 0.75, 3.45, xs[i + 1] - xs[i] - 1.5, 0.4, "필드", size=13, font=F_SB, color=GREEN, align=PP_ALIGN.CENTER)
-    for i, x in enumerate(xs):
-        circle(s, x, 3.3, 1.35, GOLD, f"마을 {i + 1}", size=16)
-    text(s, 0.7, 4.35, 8.2, 1.2, ["·  마을마다 다른 콘셉트(분위기)",
-                                   "·  공통 시설: 마구간 · 대회장 · 상점 · 퀘스트 게시판"], size=15, spacing=1.4)
-    # 레이스 vs 필드
-    box(s, 9.3, 1.95, 3.35, 4.6, fill=PANEL)
-    text(s, 9.6, 2.15, 2.9, 0.4, "레이스", size=18, font=F_XB, color=GOLD)
-    text(s, 9.6, 2.6, 2.9, 1.2, ["긴장감 있는 승부", "7가지 기승 조작", "스태미나 · 리듬"], size=13, spacing=1.3)
-    c = s.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(9.6), Inches(4.0), Inches(12.35), Inches(4.0))
-    c.line.color.rgb = PANEL2; c.line.width = Pt(1.5)
-    text(s, 9.6, 4.2, 2.9, 0.4, "필드", size=18, font=F_XB, color=GREEN)
-    text(s, 9.6, 4.65, 2.9, 1.5, ["편안한 탐험", "이동 · 달리기 · 점프", "말에서 내리기 / 타기"], size=13, spacing=1.3)
-    notes(s, "규모를 키우기 위해 오픈 필드를 추가했습니다. 콘셉트가 다른 마을 세 곳이 필드로 이어지고, 마을마다 마구간, 대회장, 상점, 퀘스트 게시판이 있습니다. 필드에서는 레이스와 달리 조작을 단순하게 해서 편하게 돌아다니는 탐험 공간으로 구분했습니다.")
+    text(s, 0.7, 0.55, 6, 0.4, "PART 2  필드 · 육성", size=14, font=F_SB, color=GOLD)
+    text(s, 0.7, 0.95, 10, 0.8, "광활한 오픈 필드 위의 마을 3곳", size=34, font=F_XB)
+    # 지도 (ChatGPT로 생성한 필드 지도, 비율 유지 · 모서리 둥글게)
+    MX, MY, MH = 0.7, 1.95, 4.85
+    iw_, ih_ = Image.open(os.path.join(ROOT, "필드지도.png")).size
+    MW = MH * iw_ / ih_
+    pic = s.shapes.add_picture(os.path.join(ROOT, "필드지도.png"), Inches(MX), Inches(MY), Inches(MW), Inches(MH))
+    geom = pic._element.spPr.find(qn("a:prstGeom"))
+    geom.set("prst", "roundRect")
+    av = geom.find(qn("a:avLst"))
+    if av is None: av = geom.makeelement(qn("a:avLst"), {}); geom.append(av)
+    av.append(av.makeelement(qn("a:gd"), {"name": "adj", "fmla": "val 4500"}))
+    # 마을 라벨 (그림 속 마을 위치 비율)
+    for nm, fx, fy in [("마을 1", 0.15, 0.27), ("마을 2", 0.53, 0.07), ("마을 3", 0.86, 0.55)]:
+        lb = box(s, MX + MW * fx - 0.55, MY + MH * fy - 0.2, 1.1, 0.4, fill=BG, alpha=78, line=GOLD, radius=0.5)
+        shape_text(lb, nm, size=12, color=GOLD, font=F_XB)
+    # 오른쪽 설명
+    RX = MX + MW + 0.3
+    RW = 12.65 - RX
+    box(s, RX, MY, RW, MH, fill=PANEL)
+    text(s, RX + 0.3, MY + 0.25, 3.3, 0.4, "마을 3곳", size=18, font=F_XB, color=GOLD)
+    text(s, RX + 0.3, MY + 0.7, 3.4, 0.4, "마을마다 다른 콘셉트 · 분위기", size=13.5)
+    text(s, RX + 0.3, MY + 1.35, 3.3, 0.4, "공통 시설", size=18, font=F_XB, color=GOLD)
+    for k_, fac in enumerate(["마구간", "대회장", "상점", "퀘스트 게시판"]):
+        cw_ = (RW - 0.7) / 2
+        cx_ = RX + 0.3 + (k_ % 2) * (cw_ + 0.1); cy_ = MY + 1.85 + (k_ // 2) * 0.55
+        c_ = box(s, cx_, cy_, cw_, 0.42, fill=PANEL2, radius=0.5)
+        shape_text(c_, fac, size=12, color=CREAM, font=F_SB)
+    text(s, RX + 0.3, MY + 3.1, 3.3, 0.4, "오픈 필드", size=18, font=F_XB, color=GOLD)
+    text(s, RX + 0.3, MY + 3.55, 3.4, 1.2, ["마을 사이 어디든 자유롭게 탐험", "채집 · 점프 코스 · 숨겨진 수집품"],
+         size=13, spacing=1.4)
+    notes(s, "규모를 키우기 위해 오픈 필드를 추가했습니다. 마을과 마을을 잇는 길이 아니라, 넓은 필드 위에 콘셉트가 서로 다른 마을 세 곳이 자리 잡은 구조입니다. "
+             "마을마다 마구간, 대회장, 상점, 퀘스트 게시판이 있고, 필드에서는 어디든 자유롭게 달리며 채집하고, 점프 코스를 넘어 숨겨진 수집품을 찾을 수 있습니다.")
 
     # 9. 필드에서 하는 일
     s = prs.slides.add_slide(BLANK); set_bg(s)
     title(s, "필드에서 하는 일")
     tag(s, "피드백 4 · 5 대응")
-    cards = [("5장.png", "파밍", ["먹이: 과일 · 채소 · 곡물 · 견과류", "치장 재료: 꽃 · 깃털 · 염료 · 가죽"]),
-             ("9장.png", "점프 코스 · 수집품", ["필드 곳곳의 점프 코스", "숨겨진 말굽 문양 수집품"]),
-             ("11장.png", "마을 퀘스트", ["마을에서 여러 퀘스트 수주", "보상: 돈 · 재료 · 아이템"])]
+    cards = [("파밍.png", "파밍", ["먹이: 과일 · 채소 · 곡물 · 견과류", "치장 재료: 꽃 · 깃털 · 염료 · 가죽"]),
+             ("점프코스.png", "점프 코스 · 수집품", ["필드 곳곳의 점프 코스", "숨겨진 말굽 문양 수집품"]),
+             ("퀘스트.png", "마을 퀘스트", ["마을에서 여러 퀘스트 수주", "보상: 돈 · 재료 · 아이템"])]
     x = 0.7
     for img, nm, pts in cards:
         box(s, x, 1.75, 3.85, 4.2, fill=PANEL)
-        photo(s, img, x, 1.75, 3.85, 2.25)
+        iw_, ih_ = Image.open(os.path.join(ROOT, img)).size
+        photo(s, img, x, 1.75, 3.85, 3.85 * ih_ / iw_)  # 비율 유지 (크롭 없음)
         text(s, x + 0.3, 4.2, 3.3, 0.5, nm, size=21, font=F_XB, color=GOLD)
         text(s, x + 0.3, 4.8, 3.35, 1.6, ["·  " + p for p in pts], size=13.5, spacing=1.4)
         x += 4.05
