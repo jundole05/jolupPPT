@@ -126,11 +126,6 @@ def title(slide, t, sub=None):
     if sub: text(slide, 0.72, 1.32, 10.5, 0.4, sub, size=15, font=F_SB, color=GOLD)
 
 
-def tag(slide, label):
-    s = box(slide, 10.55, 0.62, 2.1, 0.4, fill=None, line=GOLD, radius=0.5)
-    shape_text(s, label, size=11, color=GOLD, font=F_SB)
-
-
 def arrow(slide, x1, y1, x2, y2, color=GOLD, width=2.25):
     c = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(x1), Inches(y1), Inches(x2), Inches(y2))
     c.line.color.rgb = color; c.line.width = Pt(width)
@@ -174,20 +169,19 @@ def build():
 
     # 2. PART 1 도입 — 실제 승마의 구조
     s = prs.slides.add_slide(BLANK); set_bg(s)
-    tag(s, "피드백 1 · 2 · 3 대응")
     text(s, 0.7, 0.55, 8, 0.4, "PART 1  기승 조작 시스템", size=14, font=F_SB, color=GOLD)
-    text(s, 0.7, 0.95, 11.5, 0.8, "승마는 '부조'로 말과 대화하는 운동이다", size=32, font=F_XB)
-    text(s, 0.72, 1.7, 11.5, 0.4, "부조(扶助, Aids) — 기수가 말에게 보내는 신호", size=14, color=MUTED)
+    text(s, 0.7, 0.95, 11.5, 0.8, "기수는 부조로 말을 움직인다", size=32, font=F_XB)
+    text(s, 0.72, 1.7, 11.8, 0.4, "부조(扶助, Aids): 기수가 손 · 다리 · 체중 · 도구로 말에게 보내는 신호", size=14, color=MUTED)
 
     # 구조 도식: 기수 → 부조 → 말 → 움직임
     flow = [("기수", "신호를 보낸다", PANEL2, CREAM), ("부조", "손 · 다리 · 체중 · 도구", GOLD, DARKTXT),
             ("말", "보법과 리듬으로 반응", PANEL2, CREAM), ("움직임", "방향 · 속도 · 도약", PANEL2, CREAM)]
     x = 0.7
     for i, (a_, b_, fc, tc) in enumerate(flow):
-        box(s, x, 2.3, 2.6, 1.05, fill=fc)
-        text(s, x, 2.3, 2.6, 1.05, [[(a_, {"size": 20, "font": F_XB, "color": tc})], [(b_, {"size": 11.5, "color": tc})]],
-             align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-        if i < 3: arrow(s, x + 2.66, 2.825, x + 3.06, 2.825)
+        box(s, x, 2.45, 2.6, 1.25, fill=fc)
+        text(s, x, 2.45, 2.6, 1.25, [[(a_, {"size": 22, "font": F_XB, "color": tc})], [(b_, {"size": 12.5, "color": tc})]],
+             align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE, spacing=1.25)
+        if i < 3: arrow(s, x + 2.66, 3.075, x + 3.06, 3.075)
         x += 3.1
 
     # 부조의 종류 + 말의 움직임
@@ -196,50 +190,36 @@ def build():
              ("말의 움직임", "기수가 맞춰야 하는 리듬", [("보법", "평보 → 속보 → 구보 → 습보"), ("리듬", "걸음마다 일정한 박자")], GOLD)]
     x = 0.7
     for nm, sub, rows_, col in cards:
-        box(s, x, 3.65, 3.83, 2.45, fill=PANEL)
-        text(s, x + 0.3, 3.82, 3.4, 0.45, nm, size=19, font=F_XB, color=col)
-        text(s, x + 0.3, 4.25, 3.4, 0.35, sub, size=11.5, color=MUTED)
-        yy = 4.7
+        box(s, x, 4.05, 3.83, 2.85, fill=PANEL)
+        text(s, x + 0.3, 4.27, 3.4, 0.45, nm, size=21, font=F_XB, color=col)
+        text(s, x + 0.3, 4.75, 3.4, 0.35, sub, size=12.5, color=MUTED)
+        yy = 5.3
         for k_, v_ in rows_:
-            text(s, x + 0.3, yy, 3.5, 0.4, [[(k_ + "   ", {"font": F_SB, "size": 13.5, "color": CREAM}), (v_, {"size": 12, "color": MUTED})]])
-            yy += 0.43
+            text(s, x + 0.3, yy, 3.5, 0.4, [[(k_ + "   ", {"font": F_SB, "size": 14.5, "color": CREAM}), (v_, {"size": 13, "color": MUTED})]])
+            yy += 0.5
         x += 3.99
-
-    # PART 1 흐름 예고
-    steps_ = ["실제 승마 기술", "게임 구현", "조작 방식"]
-    x = 0.7
-    for i, st in enumerate(steps_):
-        b2 = box(s, x, 6.4, 2.6, 0.55, fill=None, line=GOLD, radius=0.5)
-        shape_text(b2, f"{i + 1}  {st}", size=13, color=GOLD, font=F_SB)
-        if i < 2: arrow(s, x + 2.66, 6.675, x + 3.0, 6.675, width=1.5)
-        x += 3.1
-    text(s, 10.05, 6.4, 2.6, 0.55, "PART 1의 흐름", size=12, color=MUTED, anchor=MSO_ANCHOR.MIDDLE)
-    notes(s, "실제 승마에서 기수는 말을 직접 움직이지 않습니다. 부조라고 하는 신호를 보내 말과 대화합니다. "
-             "손으로 잡는 고삐, 다리, 기좌와 체중 같은 몸으로 보내는 자연 부조가 있고, 채찍이나 박차처럼 도구로 신호를 보강하는 인공 부조가 있습니다. "
-             "말은 이 신호를 받아 평보, 속보, 구보, 습보의 보법으로 움직이고, 걸음마다 일정한 리듬이 있어 기수는 그 리듬에 몸을 맞춥니다. "
-             "이제 이 승마의 구조를 저희 게임에 어떻게 구현했고, 어떤 조작으로 표현했는지 말씀드리겠습니다.")
+    notes(s, "실제 승마에서 기수는 부조라는 신호로 말을 움직입니다. 부조에는 고삐, 다리, 체중처럼 몸을 쓰는 자연 부조와, "
+             "채찍이나 박차처럼 도구를 쓰는 인공 부조가 있습니다. 말은 이 신호를 받아 평보, 속보, 구보, 습보의 보법으로 움직이고, "
+             "걸음마다 일정한 리듬이 있습니다. 이 구조를 게임에 어떻게 옮겼는지 설명드리겠습니다.")
 
     # 4. 7가지 승마 조작
     s = prs.slides.add_slide(BLANK); set_bg(s)
     title(s, "실제 승마 기술을 게임으로", "7가지 기승 조작")
-    tag(s, "피드백 2 대응")
     items = [("고삐", "방향 전환 · 감속"), ("다리(박차)", "가속, 스태미나 소모"), ("자세", "코너링 · 최고 속도"),
              ("보법", "구보 / 습보 모드 전환"), ("리듬", "박자에 맞추면 효율 가속"), ("점프", "장애물 타이밍"),
              ("채찍", "레이스당 횟수 제한 순간 가속")]
     pos = [(0.7, 2.0), (3.75, 2.0), (6.8, 2.0), (9.85, 2.0), (2.22, 4.35), (5.27, 4.35), (8.32, 4.35)]
     for i, ((nm, ef), (x, y)) in enumerate(zip(items, pos)):
-        hl = i in (3, 4)
+        hl = False
         box(s, x, y, 2.8, 2.05, fill=PANEL2 if hl else PANEL, line=GOLD if hl else None)
         circle(s, x + 0.55, y + 0.55, 0.62, GOLD if hl else GREEN, str(i + 1), size=16)
         text(s, x + 0.3, y + 1.0, 2.3, 0.5, nm, size=20, font=F_XB, color=GOLD if hl else CREAM)
         text(s, x + 0.3, y + 1.5, 2.35, 0.5, ef, size=13, color=CREAM)
-    text(s, 0.7, 6.65, 12, 0.4, "강조된 보법 · 리듬이 우리 게임만의 차별점", size=12, color=MUTED)
     notes(s, "실제 승마의 부조 기술을 일곱 가지 조작으로 옮겼습니다. 고삐, 다리, 자세, 보법, 리듬, 점프, 채찍입니다. 이 중 보법과 리듬이 일반 레이싱 게임과 가장 다른 부분입니다.")
 
     # 4. 조작 키
     s = prs.slides.add_slide(BLANK); set_bg(s)
     title(s, "왼손은 말을, 오른손은 기수의 몸을", "키보드 조작")
-    tag(s, "피드백 2 · 3 대응")
 
     def key(x, y, w, lab, desc, fill):
         k = box(s, x, y, w, 0.78, fill=fill, radius=0.18)
@@ -270,7 +250,6 @@ def build():
     # 5. 보법 모드 + 리듬 (조작 키 다음)
     s = prs.slides.add_slide(BLANK); set_bg(s)
     title(s, "직선은 습보, 코너는 구보", "보법 모드와 리듬 — 우리 게임만의 차별점")
-    tag(s, "피드백 1 대응")
     # 트랙 도식: 직선(습보) — 코너(구보) — 직선(습보)
     ty = 2.95
     seg = box(s, 0.9, ty, 4.4, 0.42, fill=GOLD, radius=0.5)
@@ -318,7 +297,6 @@ def build():
 
     # 8. 월드 구조 — 광활한 필드 위의 마을
     s = prs.slides.add_slide(BLANK); set_bg(s)
-    tag(s, "피드백 4 대응")
     text(s, 0.7, 0.55, 6, 0.4, "PART 2  필드 · 육성", size=14, font=F_SB, color=GOLD)
     text(s, 0.7, 0.95, 10, 0.8, "광활한 오픈 필드 위의 마을 3곳", size=34, font=F_XB)
     # 지도 (ChatGPT로 생성한 필드 지도, 비율 유지 · 모서리 둥글게)
@@ -353,27 +331,55 @@ def build():
     notes(s, "규모를 키우기 위해 오픈 필드를 추가했습니다. 마을과 마을을 잇는 길이 아니라, 넓은 필드 위에 콘셉트가 서로 다른 마을 세 곳이 자리 잡은 구조입니다. "
              "마을마다 마구간, 대회장, 상점, 퀘스트 게시판이 있고, 필드에서는 어디든 자유롭게 달리며 채집하고, 점프 코스를 넘어 숨겨진 수집품을 찾을 수 있습니다.")
 
-    # 9. 필드에서 하는 일
-    s = prs.slides.add_slide(BLANK); set_bg(s)
-    title(s, "필드에서 하는 일")
-    tag(s, "피드백 4 · 5 대응")
-    cards = [("파밍.png", "파밍", ["먹이: 과일 · 채소 · 곡물 · 견과류", "치장 재료: 꽃 · 깃털 · 염료 · 가죽"]),
-             ("점프코스.png", "점프 코스 · 수집품", ["필드 곳곳의 점프 코스", "숨겨진 말굽 문양 수집품"]),
-             ("퀘스트.png", "마을 퀘스트", ["마을에서 여러 퀘스트 수주", "보상: 돈 · 재료 · 아이템"])]
-    x = 0.7
-    for img, nm, pts in cards:
-        box(s, x, 1.75, 3.85, 4.2, fill=PANEL)
-        iw_, ih_ = Image.open(os.path.join(ROOT, img)).size
-        photo(s, img, x, 1.75, 3.85, 3.85 * ih_ / iw_)  # 비율 유지 (크롭 없음)
-        text(s, x + 0.3, 4.2, 3.3, 0.5, nm, size=21, font=F_XB, color=GOLD)
-        text(s, x + 0.3, 4.8, 3.35, 1.6, ["·  " + p for p in pts], size=13.5, spacing=1.4)
-        x += 4.05
-    notes(s, "필드에서는 세 가지를 합니다. 먹이와 치장 재료를 채집하고, 점프 코스를 넘어 숨겨진 수집품을 찾고, 마을에서 받은 퀘스트를 수행해 보상을 얻습니다.")
+    # 9. 필드 콘텐츠 — 기능 하나당 한 페이지
+    field_pages = [
+        dict(img="파밍.png", no="01", name="파밍", head=["필드에서", "먹이와 치장 재료를 모은다"],
+             groups=[("먹이", "과일 · 채소 · 곡물 · 견과류", "말의 능력치 성장에 사용"),
+                     ("치장 재료", "꽃 · 깃털 · 염료 열매 · 철광석 · 가죽", "치장 아이템 제작에 사용")],
+             points=["E 키로 채집, 일정 시간 후 다시 생성", "말에서 내려야 닿는 채집 장소도 존재 (F 키)"],
+             note="필드에서는 먹이와 치장 재료를 채집합니다. 과일, 채소, 곡물, 견과류 같은 먹이는 말의 능력치를 키우는 데 쓰고, "
+                  "꽃, 깃털, 염료 열매, 철광석, 가죽 같은 재료는 치장 아이템을 만드는 데 씁니다. "
+                  "채집물은 일정 시간이 지나면 다시 생기고, 일부는 말에서 내려야만 닿을 수 있는 곳에 있습니다."),
+        dict(img="점프코스.png", no="02", name="점프 코스 · 수집품", head=["점프 코스를 넘어", "숨겨진 보물을 찾는다"],
+             groups=[("점프 코스", "통나무 · 돌담 · 개울", "필드 곳곳에 배치, Space로 넘기"),
+                     ("숨겨진 수집품", "황금 말굽 문양", "모으면 특별 치장 보상")],
+             points=["필드에서 유일한 실력 요소", "탐험할 이유를 만드는 장치"],
+             note="필드 곳곳에는 통나무, 돌담, 개울 같은 점프 코스가 있습니다. 점프 코스를 넘어야 갈 수 있는 숨겨진 장소에 황금 말굽 수집품이 있고, "
+                  "일정 개수를 모으면 특별한 치장 아이템을 받습니다. 필드에서 유일하게 실력이 필요한 요소이자, 구석구석 탐험하게 만드는 장치입니다."),
+        dict(img="퀘스트.png", no="03", name="마을 퀘스트", head=["마을에서 의뢰를 받아", "필드를 누빈다"],
+             groups=[("수주", "퀘스트 게시판 · 마을 NPC", "마을마다 여러 종류의 퀘스트"),
+                     ("보상", "돈 · 재료 · 아이템", "육성과 치장으로 이어짐")],
+             points=["퀘스트 종류와 내용은 상세 설계 예정"],
+             note="각 마을의 퀘스트 게시판이나 마을 사람들에게서 여러 종류의 퀘스트를 받을 수 있습니다. "
+                  "퀘스트를 완료하면 돈, 재료, 아이템을 보상으로 받고, 이 보상은 말을 키우고 꾸미는 데 쓰입니다. 퀘스트의 구체적인 종류는 앞으로 상세하게 설계할 예정입니다."),
+    ]
+    for fp in field_pages:
+        s = prs.slides.add_slide(BLANK); set_bg(s)
+        text(s, 0.7, 0.55, 8, 0.4, f"필드 콘텐츠  {fp['no']}", size=14, font=F_SB, color=GOLD)
+        text(s, 0.7, 0.95, 10, 0.8, fp["name"], size=34, font=F_XB)
+        IX, IY, IW = 0.7, 1.9, 8.1
+        iw_, ih_ = Image.open(os.path.join(ROOT, fp["img"])).size
+        IH = IW * ih_ / iw_
+        pic = s.shapes.add_picture(os.path.join(ROOT, fp["img"]), Inches(IX), Inches(IY), Inches(IW), Inches(IH))
+        geom = pic._element.spPr.find(qn("a:prstGeom")); geom.set("prst", "roundRect")
+        av = geom.find(qn("a:avLst"))
+        if av is None: av = geom.makeelement(qn("a:avLst"), {}); geom.append(av)
+        av.append(av.makeelement(qn("a:gd"), {"name": "adj", "fmla": "val 4500"}))
+        RX = IX + IW + 0.3; RW = 12.65 - RX
+        box(s, RX, IY, RW, IH, fill=PANEL)
+        text(s, RX + 0.3, IY + 0.25, RW - 0.5, 0.8, fp["head"], size=16, font=F_XB, color=CREAM, spacing=1.2)
+        yy = IY + 1.2
+        for gname, gitems, guse in fp["groups"]:
+            text(s, RX + 0.3, yy, RW - 0.5, 0.35, gname, size=15, font=F_XB, color=GOLD)
+            text(s, RX + 0.3, yy + 0.36, RW - 0.5, 0.35, gitems, size=12.5, font=F_SB, color=CREAM)
+            text(s, RX + 0.3, yy + 0.68, RW - 0.5, 0.35, guse, size=11.5, color=MUTED)
+            yy += 1.12
+        text(s, RX + 0.3, yy + 0.05, RW - 0.5, 0.9, ["·  " + p_ for p_ in fp["points"]], size=11.5, color=CREAM, spacing=1.35)
+        notes(s, fp["note"])
 
     # 10. 먹이 육성
     s = prs.slides.add_slide(BLANK); set_bg(s)
     title(s, "먹이로 키우는 육성", "모든 성장은 레이스 성능으로 이어진다")
-    tag(s, "피드백 5 · 6 대응")
     foods = [("과일", "속도"), ("채소", "지구력"), ("곡물", "순발력"), ("견과류", "점프력")]
     cols = [RGBColor(0xE8, 0x7A, 0x5D), RGBColor(0xE9, 0xA2, 0x4A), RGBColor(0xD8, 0xC0, 0x6A), RGBColor(0xB0, 0x86, 0x5A)]
     x = 1.0
